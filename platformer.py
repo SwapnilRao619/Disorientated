@@ -1,21 +1,31 @@
 import pygame
 from sys import exit
 
-pygame.init()
+#functions
+def dispscore():
+    currtime = pygame.time.get_ticks()-timestart 
+    scorens = scoren.render(f'. {currtime//100}',False,'pink')   
+    scorenr = scorens.get_rect(topleft=(100,1))
+    screen.blit(scorens,scorenr)
 
 #essentials
+pygame.init()
 screen=pygame.display.set_mode((800,400))
 pygame.display.set_caption("Disoriented")
 clock=pygame.time.Clock()
+menufont1=pygame.font.Font('font/Pixeltype3.ttf',80)
+menufont2=pygame.font.Font('font/Pixeltype3.ttf',50)
+scoren=pygame.font.Font('font/Pixeltype2.ttf',43)
 score=pygame.font.Font('font/Pixeltype.otf',30)
-gamestatus=True
+gamestatus=False
+timestart=0
 
 #surfaces
 skys=pygame.image.load('graphics/Sky.png').convert()
 grounds=pygame.image.load('graphics/ground.png').convert()
 
 scores=score.render('SCORE', False, 'pink')
-scorer=scores.get_rect(topleft=(5,-3))
+scorer=scores.get_rect(topleft=(10,-3))
 
 hounds=pygame.image.load('graphics/snail/tile000.png').convert_alpha()
 '''38 24'''
@@ -26,7 +36,11 @@ players=pygame.image.load('graphics/Player/player1.png').convert_alpha()
 '''37 39 -> 44 60'''
 players = pygame.transform.scale(players, (75,100))
 playerr=players.get_rect(midbottom=(50,300))
+playermenur=players.get_rect(center=(400,232))
 playerg=0
+
+menus=pygame.image.load('graphics/bg.png').convert_alpha()
+menur=menus.get_rect(center=(400,200))
 
 #loops and placements
 while True:
@@ -43,18 +57,23 @@ while True:
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if playerr.collidepoint(event.pos):
                     playerg=-20
-            if event.type == pygame.KEYUP:
-                print("keydown")
+
         else:
             if event.type==pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
                     gamestatus=True    
-                    houndr.right=800    
+                    houndr.right=800 
+                    timestart=pygame.time.get_ticks()
+            if event.type==pygame.MOUSEBUTTONDOWN:
+                gamestatus=True    
+                houndr.right=800    
+                timestart=pygame.time.get_ticks()   
 
     if gamestatus==True:
         screen.blit(skys,(0,0))
         screen.blit(grounds,(0,300))
         screen.blit(scores,scorer)
+        dispscore()
         houndr.right+=-5
         if houndr.right<-100:
             houndr.right=900
@@ -69,7 +88,14 @@ while True:
             gamestatus=False
 
     else:
-        screen.fill('red')
+        screen.blit(menus,menur)
+        menufonts1=menufont1.render('(DISORIENTED)',False,'yellow')
+        menufontr1=menufonts1.get_rect(center=(400,100))
+        menufonts2=menufont2.render('PRESS SPACE TO PLAY',False,'yellow')
+        menufontr2=menufonts2.get_rect(center=(400,350))
+        screen.blit(menufonts1,menufontr1)
+        screen.blit(menufonts2,menufontr2)
+        screen.blit(players,playermenur)
 
     pygame.display.update()
     clock.tick(60)
