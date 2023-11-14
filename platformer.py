@@ -17,12 +17,14 @@ scores=score.render('SCORE', False, 'pink')
 scorer=scores.get_rect(topleft=(5,-3))
 
 hounds=pygame.image.load('graphics/snail/tile000.png').convert_alpha()
-hounds = pygame.transform.scale(hounds, (144,72))
+#38 24
+hounds = pygame.transform.scale(hounds, (76, 44))
 houndr=hounds.get_rect(midbottom=(900,300))
 
 players=pygame.image.load('graphics/Player/player.png').convert_alpha()
-players = pygame.transform.scale(players, (128, 128))
-playerr=players.get_rect(midbottom=(50,318))
+#37 39
+players = pygame.transform.scale(players, (64,68))
+playerr=players.get_rect(midbottom=(50,300))
 playerg=0
 
 #loops and placements
@@ -32,7 +34,7 @@ while True:
             exit()
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_SPACE:
-                if playerr.bottom==318:
+                if playerr.bottom==300:
                     playerg=-20    
                 else:
                     pass
@@ -51,11 +53,13 @@ while True:
     if houndr.right<-100:
         houndr.right=900
     screen.blit(hounds,houndr)
-    playerg+=1.1
+    playerg+=0.98
     playerr.y+=playerg
-    if playerr.bottom>=318:
-        playerr.bottom=318
+    if playerr.bottom>=300:
+        playerr.bottom=300
     screen.blit(players,playerr)
 
-
+    if houndr.colliderect(playerr):
+        pygame.quit()
+    
 pygame.close()
