@@ -7,6 +7,7 @@ def dispscore():
     scorens = scoren.render(f'. {currtime//100}',False,'pink')   
     scorenr = scorens.get_rect(topleft=(100,1))
     screen.blit(scorens,scorenr)
+    return currtime
 
 #essentials
 pygame.init()
@@ -16,9 +17,11 @@ clock=pygame.time.Clock()
 menufont1=pygame.font.Font('font/Pixeltype3.ttf',80)
 menufont2=pygame.font.Font('font/Pixeltype3.ttf',50)
 scoren=pygame.font.Font('font/Pixeltype2.ttf',43)
+scorena=pygame.font.Font('font/Pixeltype2.ttf',55)
 score=pygame.font.Font('font/Pixeltype.otf',30)
 gamestatus=False
 timestart=0
+finscore=0
 
 #surfaces
 skys=pygame.image.load('graphics/Sky.png').convert()
@@ -56,7 +59,8 @@ while True:
                         pass
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if playerr.collidepoint(event.pos):
-                    playerg=-20
+                    if playerr.bottom==300:
+                        playerg=-20
 
         else:
             if event.type==pygame.KEYDOWN:
@@ -73,7 +77,7 @@ while True:
         screen.blit(skys,(0,0))
         screen.blit(grounds,(0,300))
         screen.blit(scores,scorer)
-        dispscore()
+        finscore=dispscore()
         houndr.right+=-5
         if houndr.right<-100:
             houndr.right=900
@@ -91,10 +95,15 @@ while True:
         screen.blit(menus,menur)
         menufonts1=menufont1.render('(DISORIENTED)',False,'yellow')
         menufontr1=menufonts1.get_rect(center=(400,100))
-        menufonts2=menufont2.render('PRESS SPACE TO PLAY',False,'yellow')
-        menufontr2=menufonts2.get_rect(center=(400,350))
+        menufonts3=scorena.render(f'SCORE . {finscore//100}',False,'yellow')
+        menufontr3=menufonts3.get_rect(center=(400,350))
+        if finscore==0:
+            menufonts2=menufont2.render('PRESS SPACE TO PLAY',False,'yellow')
+            menufontr2=menufonts2.get_rect(center=(400,350))
+            screen.blit(menufonts2,menufontr2)
+        else:
+            screen.blit(menufonts3,menufontr3)
         screen.blit(menufonts1,menufontr1)
-        screen.blit(menufonts2,menufontr2)
         screen.blit(players,playermenur)
 
     pygame.display.update()
