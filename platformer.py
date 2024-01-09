@@ -45,6 +45,9 @@ playerg=0
 menus=pygame.image.load('graphics/bg.png').convert_alpha()
 menur=menus.get_rect(center=(400,200))
 
+#timer
+tim1=pygame.USEREVENT +1 
+
 #loops and placements
 while True:
     for event in pygame.event.get():
